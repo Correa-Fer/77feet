@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#181818"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="77Feet"><link rel="manifest" href="manifest.webmanifest">
+<title>77Feet Training Dashboard</title>
+<style>
+:root{--orange:#ff8c19;--dark:#202020;--bg:#f4f4f4;--card:#fff;--muted:#777;--line:#e5e5e5}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--dark)}
+header{background:#181818;color:#fff;padding:18px 24px;position:sticky;top:0;z-index:5}
+.head{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.logo{font-size:22px;font-weight:800;letter-spacing:.5px}.logo span{color:var(--orange)}
+button,.btn{border:0;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:700}
+.primary{background:var(--orange);color:#fff}.secondary{background:#333;color:#fff}
+main{max-width:1200px;margin:24px auto;padding:0 18px}
+.hero{background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 12px #0000000b;margin-bottom:18px}
+.hero h1{margin:0 0 7px;font-size:30px}.hero p{margin:0;color:var(--muted)}
+.days{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:18px 0}
+.day{background:#fff;border:2px solid transparent;border-radius:11px;padding:12px;text-align:center;cursor:pointer}
+.day.active{border-color:var(--orange)} .day small{display:block;color:#999;margin-top:4px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+.card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 12px #0000000b;margin-bottom:18px}
+.card h2{margin:0 0 15px;font-size:20px}.section{border-top:1px solid var(--line);padding:15px 0}.section:first-of-type{border-top:0;padding-top:0}
+.tag{display:inline-block;background:#f2f2f2;border-radius:20px;padding:5px 9px;font-size:12px;font-weight:700;margin-bottom:8px}
+.exercise{font-size:17px;font-weight:700;margin:6px 0}.note{color:var(--muted);font-size:14px;line-height:1.5}
+.sets{width:100%;border-collapse:collapse;margin-top:9px}.sets td{padding:8px;border-bottom:1px solid var(--line)}.sets td:last-child{text-align:right;font-weight:700}
+input{width:100%;padding:9px;border:1px solid #ccc;border-radius:8px;margin:5px 0 12px}
+.rmrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.calc{background:#fafafa;border-radius:10px;padding:12px;margin-top:8px}
+.percent{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line)}
+.empty{color:#888;padding:20px 0;text-align:center}.ok{color:#26844a;font-weight:700}
+.search{display:flex;gap:8px;margin-bottom:15px}.search input{margin:0}
+footer{text-align:center;color:#999;font-size:12px;padding:20px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.days{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.days{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:24px}}
+</style>
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+html,body{min-height:100%;-webkit-tap-highlight-color:transparent}
+body{padding-bottom:env(safe-area-inset-bottom)}
+header{padding-top:calc(14px + env(safe-area-inset-top));}
+button,.btn,.day{min-height:44px}
+.day{touch-action:manipulation}
+@media(max-width:600px){
+  main{margin:12px auto;padding:0 10px}
+  .hero{padding:16px;border-radius:14px;margin-bottom:10px}
+  .hero h1{font-size:22px}
+  .hero p{font-size:13px;line-height:1.4}
+  .days{position:sticky;top:61px;z-index:4;background:var(--bg);padding:7px 0;margin:0 -2px 10px;grid-template-columns:repeat(3,1fr);gap:6px}
+  .day{padding:9px 5px;font-size:13px}
+  .day small{font-size:10px}
+  .grid{display:block}
+  aside{display:block}
+  .card{padding:15px;border-radius:14px;margin-bottom:10px}
+  .card h2{font-size:18px;margin-bottom:10px}
+  .exercise{font-size:16px;line-height:1.35}
+  .sets td{padding:9px 5px;font-size:14px}
+  .note{font-size:13px}
+  .rmrow{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<header><div class="head"><div class="logo">77FEET <span>TRAINING</span></div><div><button class="secondary" onclick="resetData()">Restablecer</button></div></div></header>
+<main>
+<section class="hero">
+<h1>Mi programación</h1>
+<p>Semana completa 77Feet · pesos calculados con tus RM · actualización rápida desde el navegador.</p>
+</section>
+
+<div class="days" id="days"></div>
+
+<div class="grid">
+<div>
+<div class="card">
+<div class="search"><input id="search" placeholder="Buscar ejercicio, movimiento o palabra..." oninput="renderWorkout()"></div>
+<div id="workout"></div>
+</div>
+</div>
+
+<aside>
+<div class="card">
+<h2>Mis RM</h2>
+<p class="note">Introduce tus máximos. Los cálculos se guardan automáticamente en este navegador.</p>
+<div class="rmrow">
+<div><label>Clean (kg)</label><input id="clean" type="number" value="150" oninput="saveRMs()"></div>
+<div><label>Power Clean (kg)</label><input id="powerClean" type="number" value="135" oninput="saveRMs()"></div>
+<div><label>Back Squat (kg)</label><input id="backSquat" type="number" value="190" oninput="saveRMs()"></div>
+<div><label>Split Jerk (kg)</label><input id="splitJerk" type="number" value="150" oninput="saveRMs()"></div>
+<div><label>Deadlift (kg)</label><input id="deadlift" type="number" value="240" oninput="saveRMs()"></div>
+<div><label>Power Snatch (kg)</label><input id="powerSnatch" type="number" value="100" oninput="saveRMs()"></div>
+<div><label>Snatch (kg)</label><input id="snatch" type="number" value="110" oninput="saveRMs()"></div>
+<div><label>Press banca (kg)</label><input id="benchPress" type="number" value="140" oninput="saveRMs()"></div>
+<div><label>Push Press (kg)</label><input id="pushPress" type="number" value="120" oninput="saveRMs()"></div>
+<div><label>Press estricto (kg)</label><input id="strictPress" type="number" value="85" oninput="saveRMs()"></div>
+<div><label>Front Squat (kg)</label><input id="frontSquat" type="number" value="160" oninput="saveRMs()"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Calculadora rápida</h2>
+<label>RM</label><input id="quickRM" type="number" placeholder="Ej. 150">
+<label>Porcentaje</label><input id="quickPct" type="number" value="80" oninput="quickCalc()">
+<div class="calc"><strong id="quickResult">—</strong></div>
+</div>
+
+<div class="card">
+<h2>Cómo usarlo</h2>
+<p class="note">1. Abre este archivo desde el escritorio o móvil.</p>
+<p class="note">2. Selecciona el día.</p>
+<p class="note">3. Actualiza tus RM cuando cambien.</p>
+<p class="note">4. Para añadir la programación completa de una semana, sustituye los bloques de cada día con las capturas de 77Feet.</p>
+</div>
+</aside>
+</div>
+</main>
+<footer>Panel personal · Los datos de RM se guardan localmente en tu navegador.</footer>
+
+<script>
+const workouts = {
+"Lunes": {
+title:"Sesión #1",
+sections:[
+{tag:"A) OLY",items:[
+["A.1","Warm Up — Every 7’ x 4 Rounds: 45” Echo Bike / Bike Erg Progressive",
+[["R1 · 50% · 75 kg","4 Squat Clean AFAP"],["R2 · 60% · 90 kg","4 Squat Clean AFAP"],["R3 · 70% · 105 kg","4 Squat Clean AFAP"],["R4 · 75% · 112,5 kg","4 Squat Clean AFAP"]],
+"Trabajo de activación donde combinamos Echo Bike con Squat Clean. En los 45” haces progresivos, de menos a más, y al ejecutar las 4 repeticiones de clean con una transición muy rápida. Tenemos que buscar una sensación de «quemazón» en la pierna, pero que nos prepare para los loaders que tenemos."],
+["A.2","Squat Clean Ladder",
+[["1 set","4/3/2/1 Squat Clean AFAP · 70/75/80/85% → 105/112,5/120/127,5 kg"],["1 set","2/2/1/1 Squat Clean AFAP · 75/80/85/88% → 112,5/120/127,5/132 kg"]],
+"Misma dinámica que la semana anterior pero con squat clean esta vez. Un primer tramo con un volumen muy alto. Trata de moverte rápido y asegura esa última repetición que se puede complicar. Un segundo ladder con mucho menos volumen, pero con carga más alta. Lo dicho anteriormente y lo repetiremos todas las semanas, montar 4 barras es un follón para cualquier box. Si entrenas con compañeros, mientras unos descansan, ayudan a cambiar discos y viceversa."]
+]},
+{tag:"B) STRENGTH",items:[
+["B.1","Back Squat",[["82%","2 reps"],["82%","2 reps"]],"Rest 15” entre las dos primeras indicaciones y 2 min tras el segundo set."],
+["B.2","Single Leg Strength",[["","6 Double KB Front Rack Bulgarian Squats"],["","10m Dual DB Heavy Suitcase Step Ups (máximo peso posible)"]],"Rest 30” después de los búlgaros y 90” después de los step ups."]
+]},
+{tag:"C) METCON",items:[
+["","3 rounds",[],
+"15m Handstand Walk\n15/12 Calories Ski\n15m Handstand Walk\n15m Double DB Suitcase Lunges (22,5/15)\n15/12 Calories Ski\n15m Double DB Suitcase Lunges (22,5/15)\n\nTime Cap 12’. Escenario de competición de verano. El estímulo es sostener el ritmo y no buscar una salida demasiado agresiva que penalice las rondas finales."]
+]}
+]},
+"Martes": {
+title:"Sesión #1",
+sections:[
+{tag:"A) GYMNASTICS",items:[
+["","5 bloques",[["","5 rounds AFAP"],["","1 Wall Walks"],["","2 Against the Wall Strict Handstand Push-ups"]],"Rest 60” entre bloques."]
+]},
+{tag:"B) STRENGTH",items:[
+["B.1","Bench Press",[["82%","4 reps · aprox."]],"Rest 2 min entre sets. Con tu RM actual de 140 kg: 82% = 114,8 kg · práctico: 115 kg."],
+["B.2","Weighted Ring Dips + Alt Ring Flutter Kicks",[["","5 Weighted Ring Dips"],["","20 Alt Ring Flutter Kicks"]],"Rest 15” entre ejercicios y 2 min entre sets. 4 sets."]
+]},
+{tag:"C) METCON",items:[
+["","Intervalos competitivos",[["","4 rounds"],["","AMRAP 3’"],["","20 Burpees Box Jump Over"],["","5 Sandbag Clean (90/70)"],["","Remaining time: Max Bar Complex"]],"Rest entre rondas: Ronda 1 — 2 min; Ronda 2 — 1 min; Ronda 3 — No Rest."],
+["","Complex",[["","4 Toes to Bar"],["","2 Bar Muscle-ups sin soltarse"]],"Objetivo: acumular el máximo trabajo de bar complex en el tiempo restante de cada AMRAP."]
+]}
+]},
+"Miércoles": {
+title:"Sesión #1",
+sections:[
+{tag:"A) OLY",items:[
+["A.1","1 High Hang Power Snatch + 2 Hang Power Snatch + 1 Power Snatch",[["50%","2 sets"],["60%","2 sets"],["70%","2 sets"]],"Parte de calentamiento y activación. Aguanta sin soltar la barra hasta terminar el segundo hang power snatch. El snatch desde el suelo no es touch and go. Muévete bien técnicamente."],
+["A.2","2 Hang Power Snatch + 1 Power Snatch",[["75%","3 sets"],["80%","2 sets"],["82,5%","1 set"]],"Rest 45” entre sets. Las 2 repeticiones de Hang son seguidas y después se suelta la barra para ejecutar el snatch desde el suelo."],
+["A.3","Power Snatch",[["85%","1 rep"],["90%","2 × 1"]],"Trabaja calculando el porcentaje de la RM del Power Snatch. Muévete con la máxima calidad posible."]
+]},
+{tag:"B) STRENGTH",items:[
+["B.1","Deadlift Singles",[["87%","3 sets · 2 singles"]],"Con tu RM de 240 kg: 87% = 208,8 kg · práctico: 210 kg."],
+["B.2","Deadlift touch and go",[["85%","3 sets · 3 reps"]],"Con tu RM de 240 kg: 85% = 204 kg · práctico: 205 kg."]
+]},
+{tag:"C) METCON",items:[
+["","8 rounds",[["","8 Thrusters (43/30)"],["","1 Legless"]],"Objetivo: escenario de competición. La carga de thruster es 43/30 kg y la cuerda es legless."]
+]}
+]},
+"Jueves": {
+title:"Sesión #1",
+sections:[
+{tag:"A) RUNNING",items:[
+["","15 min de warm up",[],"Then:\n1,5 km + 1 km + 500m\nRest 3’ entre sets\nThen:\n5’ Cool Down\n\nSets en pista hoy. Dale ritmo alto."]
+]}
+]},
+"Viernes": {
+title:"Sesión #1",
+sections:[
+{tag:"A) OLY",items:[
+["A.1","Every 75” x 4 Sets",[["50% · 67,5 kg · 2 sets","2 Hang Power Clean + 1 Push Jerk / 1 Power Clean + 2 Push Jerk"],["60% · 80 kg · 2 sets","2 Hang Power Clean + 1 Push Jerk / 1 Power Clean + 2 Push Jerk"]],"Tu RM de Power Clean es 135 kg. 50% = 67,5 kg · práctico: 67,5 kg; 60% = 81 kg · práctico: 80 kg."],
+["A.2","Every 90” x 3 Sets",[["70% · 95 kg","2 Hang Power Clean + 2 Push Jerk / 2 Power Clean and Push Jerk"],["75% · 100 kg","Every 75” x 3 Sets: 1 Hang Power Clean + 1 Push Jerk / 2 Power Clean and Push Jerk"],["80% · 107,5 kg","EMOM 3’: 2 Power Clean and Push Jerk"],["85% · 115 kg","Every 45” x 3 Sets: 1 Power Clean and Push Jerk"]],"El porcentaje se calcula sobre tu RM de Power Clean (135 kg)."],
+]},
+{tag:"B) GYMNASTICS",items:[
+["","EMOM 12’",[["Odd","28 Heavy Double Unders"],["Even","7 Ring Muscle-ups"]],"Alterna odd/even durante 12 minutos."]
+]},
+{tag:"C) METCON",items:[
+["","Intervalos competitivos",[["","90” ON / 3’ OFF"],["","2 Rope Climbs"],["","5 Double KB Hang Snatch (24/16)"],["","Max distance Row"]],"Hasta llegar a los 1000/950 m. El objetivo es mantener una capacidad de sufrir y entender el esfuerzo; no salir demasiado rápido para poder sostener el ritmo."]
+]}
+]},
+"Sábado": {
+title:"Sesión #1",
+sections:[
+{tag:"A) OLY",items:[
+["A.1","Warm Up — Every 90” x 3 Sets",[["50% · 55 kg","1 High Hang Squat Snatch + 1 Hang Squat Snatch + 1 Squat Snatch + 1 Squat Snatch con parada below knees + 1 Squat Snatch"],["60% · 65 kg","mismo complejo"],["70% · 77,5 kg","mismo complejo"]],"Parte de calentamiento y activación. RM Squat Snatch = 110 kg. Muévete bien técnicamente y no te calientes con los pesos; respeta los porcentajes propuestos."],
+["A.2","Every 90” x 3 Sets",[["75% · 82,5 kg","1 Hang Squat Snatch + 1 Squat Snatch con parada below knees + 1 Squat Snatch"],["80% · 87,5 kg","1 Squat Snatch con parada below knees + 1 Squat Snatch"]],"Rest 30”. Then: Every 75” x 3 Sets. Después, EMOM 3’: 1 Squat Snatch — 85/88/90%. Con tu RM de Squat Snatch de 110 kg: 85% = 93,5 kg, 88% = 96,8 kg y 90% = 99 kg · prácticos: 95 / 97,5 / 100 kg."]
+]},
+{tag:"B) STRENGTH",items:[
+["","Front Squat",[["82,5%","4 reps · 5 sets"]],"Con tu RM de Front Squat de 160 kg: 82,5% = 132 kg."]
+]},
+{tag:"C) METCON",items:[
+["","Shuttle Run + CrossFit",[["","10 × 20m Shuttle Run"],["","then 10 rounds: 3 Power Snatch (60/40) + 9 Chest to Bar"],["","then 10 × 20m Shuttle Run"]],"Una recta son 20 m. El shuttle se realiza con el cambio de dirección marcado y el objetivo es mantener consistencia. La programación indica escenario de competición y busca gestionar el ritmo para poder sostener las rondas."]
+]}
+]}
+};
+
+let selected="Martes";
+const days=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+
+function loadRMs(){
+ const r=JSON.parse(localStorage.getItem("rm77feet")||"{}");
+ ["clean","powerClean","backSquat","splitJerk","deadlift","powerSnatch","snatch","benchPress","pushPress","strictPress","frontSquat"].forEach(k=>{if(r[k]!==undefined)document.getElementById(k).value=r[k]});
+}
+function saveRMs(){
+ const r={};["clean","powerClean","backSquat","splitJerk","deadlift","powerSnatch","snatch","benchPress","pushPress","strictPress","frontSquat"].forEach(k=>r[k]=document.getElementById(k).value);
+ localStorage.setItem("rm77feet",JSON.stringify(r)); renderWorkout(); quickCalc();
+}
+function kgFromPct(pct,rm){
+ if(!rm)return null;
+ let x=rm*parseFloat(pct.replace(",","."))/100;
+ // Practical CrossFit loading: round to the nearest 2.5 kg.
+ return Math.round(x/2.5)*2.5;
+}
+function renderDays(){
+ document.getElementById("days").innerHTML=days.map(d=>`<div class="day ${d===selected?'active':''}" onclick="selectDay('${d}')"><strong>${d}</strong><small>${workouts[d]?'Programado':'Pendiente'}</small></div>`).join("");
+}
+function selectDay(d){selected=d;renderDays();renderWorkout()}
+function getRMForExercise(name){
+ const n=name.toLowerCase();
+ let key=null;
+ if(n.includes("deadlift")) key="deadlift";
+ else if(n.includes("bench press")) key="benchPress";
+ else if(n.includes("back squat")) key="backSquat";
+ else if(n.includes("front squat")) key="frontSquat";
+ else if(n.includes("power snatch")) key="powerSnatch";
+ else if(n.includes("squat snatch") || n.includes("snatch")) key="snatch";
+ else if(n.includes("power clean")) key="powerClean";
+ else if(n.includes("squat clean") || n.includes("clean")) key="clean";
+ else if(n.includes("push press")) key="pushPress";
+ else if(n.includes("split jerk")) key="splitJerk";
+ // Push Jerk is a distinct lift; no Push Jerk RM has been provided.
+ else if(n.includes("push jerk")) key=null;
+ else if(n.includes("press")) key="strictPress";
+ return key ? document.getElementById(key).value : "";
+}
+function renderWorkout(){
+ const box=document.getElementById("workout"), q=(document.getElementById("search").value||"").toLowerCase();
+ const w=workouts[selected];
+ if(!w){box.innerHTML='<div class="empty"><strong>'+selected+'</strong><br><br>Este día está preparado para añadir la programación de 77Feet.</div>';return}
+ let out=`<h2>${w.title}</h2>`;
+ w.sections.forEach(s=>{
+   const visible=s.items.filter(it=>(it[1]+" "+it[3]).toLowerCase().includes(q));
+   if(q && !visible.length)return;
+   out+=`<div class="section"><span class="tag">${s.tag}</span>`;
+   visible.forEach(it=>{
+     out+=`<div class="exercise">${it[0]} ${it[1]}</div>`;
+     if(it[2].length){
+       const rm=getRMForExercise(it[1]);
+       out+=`<table class="sets">`;
+       it[2].forEach(row=>{
+         let pct=row[0], kg=null;
+         const pctMatch=String(pct).match(/([0-9]+(?:[.,][0-9]+)?)%/);
+         if(pctMatch) kg=kgFromPct(pctMatch[1],rm);
+         const shownKg = String(pct).match(/·\s*([0-9]+)\s*kg/);
+         out+=`<tr><td>${pct}</td><td>${row[1]}${kg && !shownKg?` · <strong>${kg} kg</strong>`:''}</td></tr>`;
+       }); out+=`</table>`;
+     }
+     if(it[3])out+=`<p class="note">${it[3]}</p>`;
+   });
+   out+=`</div>`;
+ });
+ box.innerHTML=out;
+}
+function quickCalc(){
+ const rm=parseFloat(document.getElementById("quickRM").value), pct=parseFloat(document.getElementById("quickPct").value);
+ document.getElementById("quickResult").textContent=(rm&&pct)?Math.round(rm*pct/100)+" kg":"—";
+}
+function resetData(){
+ if(confirm("¿Restablecer los RM guardados?")){localStorage.removeItem("rm77feet");location.reload()}
+}
+loadRMs();renderDays();renderWorkout();quickCalc();
+</script>
+<script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));</script></body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "77Feet Training",
+  "short_name": "77Feet",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f4f4",
+  "theme_color": "#181818",
+  "description": "Programaci\u00f3n personal de 77Feet con pesos calculados seg\u00fan los RM.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
