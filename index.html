@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#181818"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="77Feet"><link rel="manifest" href="manifest.webmanifest">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>77Feet Training Dashboard</title>
 <style>
 :root{--orange:#ff8c19;--dark:#202020;--bg:#f4f4f4;--card:#fff;--muted:#777;--line:#e5e5e5}
@@ -22,7 +22,7 @@ main{max-width:1200px;margin:24px auto;padding:0 18px}
 .card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 12px #0000000b;margin-bottom:18px}
 .card h2{margin:0 0 15px;font-size:20px}.section{border-top:1px solid var(--line);padding:15px 0}.section:first-of-type{border-top:0;padding-top:0}
 .tag{display:inline-block;background:#f2f2f2;border-radius:20px;padding:5px 9px;font-size:12px;font-weight:700;margin-bottom:8px}
-.exercise{font-size:17px;font-weight:700;margin:6px 0}.note{color:var(--muted);font-size:14px;line-height:1.5}
+.exercise{font-size:17px;font-weight:700;margin:6px 0}.note{color:var(--muted);font-size:14px;line-height:1.5;white-space:pre-line}
 .sets{width:100%;border-collapse:collapse;margin-top:9px}.sets td{padding:8px;border-bottom:1px solid var(--line)}.sets td:last-child{text-align:right;font-weight:700}
 input{width:100%;padding:9px;border:1px solid #ccc;border-radius:8px;margin:5px 0 12px}
 .rmrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.calc{background:#fafafa;border-radius:10px;padding:12px;margin-top:8px}
@@ -33,38 +33,13 @@ footer{text-align:center;color:#999;font-size:12px;padding:20px}
 @media(max-width:850px){.grid{grid-template-columns:1fr}.days{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:500px){.days{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:24px}}
 </style>
-<link rel="apple-touch-icon" href="icon-192.png">
-<style>
-html,body{min-height:100%;-webkit-tap-highlight-color:transparent}
-body{padding-bottom:env(safe-area-inset-bottom)}
-header{padding-top:calc(14px + env(safe-area-inset-top));}
-button,.btn,.day{min-height:44px}
-.day{touch-action:manipulation}
-@media(max-width:600px){
-  main{margin:12px auto;padding:0 10px}
-  .hero{padding:16px;border-radius:14px;margin-bottom:10px}
-  .hero h1{font-size:22px}
-  .hero p{font-size:13px;line-height:1.4}
-  .days{position:sticky;top:61px;z-index:4;background:var(--bg);padding:7px 0;margin:0 -2px 10px;grid-template-columns:repeat(3,1fr);gap:6px}
-  .day{padding:9px 5px;font-size:13px}
-  .day small{font-size:10px}
-  .grid{display:block}
-  aside{display:block}
-  .card{padding:15px;border-radius:14px;margin-bottom:10px}
-  .card h2{font-size:18px;margin-bottom:10px}
-  .exercise{font-size:16px;line-height:1.35}
-  .sets td{padding:9px 5px;font-size:14px}
-  .note{font-size:13px}
-  .rmrow{grid-template-columns:1fr 1fr}
-}
-</style>
 </head>
 <body>
 <header><div class="head"><div class="logo">77FEET <span>TRAINING</span></div><div><button class="secondary" onclick="resetData()">Restablecer</button></div></div></header>
 <main>
 <section class="hero">
 <h1>Mi programación</h1>
-<p>Semana completa 77Feet · pesos calculados con tus RM · actualización rápida desde el navegador.</p>
+<p>Programación semanal 77Feet · cargas calculadas con tus RM actualizados · semana de competición.</p>
 </section>
 
 <div class="days" id="days"></div>
@@ -82,8 +57,8 @@ button,.btn,.day{min-height:44px}
 <h2>Mis RM</h2>
 <p class="note">Introduce tus máximos. Los cálculos se guardan automáticamente en este navegador.</p>
 <div class="rmrow">
-<div><label>Clean (kg)</label><input id="clean" type="number" value="150" oninput="saveRMs()"></div>
-<div><label>Power Clean (kg)</label><input id="powerClean" type="number" value="135" oninput="saveRMs()"></div>
+<div><label>Squat Clean (kg)</label><input id="clean" type="number" value="150" oninput="saveRMs()"></div>
+<div><label>Power Clean (kg)</label><input id="powerClean" type="number" value="140" oninput="saveRMs()"></div>
 <div><label>Back Squat (kg)</label><input id="backSquat" type="number" value="190" oninput="saveRMs()"></div>
 <div><label>Split Jerk (kg)</label><input id="splitJerk" type="number" value="150" oninput="saveRMs()"></div>
 <div><label>Deadlift (kg)</label><input id="deadlift" type="number" value="240" oninput="saveRMs()"></div>
@@ -108,7 +83,8 @@ button,.btn,.day{min-height:44px}
 <p class="note">1. Abre este archivo desde el escritorio o móvil.</p>
 <p class="note">2. Selecciona el día.</p>
 <p class="note">3. Actualiza tus RM cuando cambien.</p>
-<p class="note">4. Para añadir la programación completa de una semana, sustituye los bloques de cada día con las capturas de 77Feet.</p>
+<p class="note">4. Los pesos porcentuales se muestran sin redondear; decide tú cómo cargar la barra según los discos disponibles.</p>
+<p class="note">5. Para ver los cambios más recientes en la web instalada, abre la página con internet y recarga si hace falta.</p>
 </div>
 </aside>
 </div>
@@ -116,97 +92,10 @@ button,.btn,.day{min-height:44px}
 <footer>Panel personal · Los datos de RM se guardan localmente en tu navegador.</footer>
 
 <script>
-const workouts = {
-"Lunes": {
-title:"Sesión #1",
-sections:[
-{tag:"A) OLY",items:[
-["A.1","Warm Up — Every 7’ x 4 Rounds: 45” Echo Bike / Bike Erg Progressive",
-[["R1 · 50% · 75 kg","4 Squat Clean AFAP"],["R2 · 60% · 90 kg","4 Squat Clean AFAP"],["R3 · 70% · 105 kg","4 Squat Clean AFAP"],["R4 · 75% · 112,5 kg","4 Squat Clean AFAP"]],
-"Trabajo de activación donde combinamos Echo Bike con Squat Clean. En los 45” haces progresivos, de menos a más, y al ejecutar las 4 repeticiones de clean con una transición muy rápida. Tenemos que buscar una sensación de «quemazón» en la pierna, pero que nos prepare para los loaders que tenemos."],
-["A.2","Squat Clean Ladder",
-[["1 set","4/3/2/1 Squat Clean AFAP · 70/75/80/85% → 105/112,5/120/127,5 kg"],["1 set","2/2/1/1 Squat Clean AFAP · 75/80/85/88% → 112,5/120/127,5/132 kg"]],
-"Misma dinámica que la semana anterior pero con squat clean esta vez. Un primer tramo con un volumen muy alto. Trata de moverte rápido y asegura esa última repetición que se puede complicar. Un segundo ladder con mucho menos volumen, pero con carga más alta. Lo dicho anteriormente y lo repetiremos todas las semanas, montar 4 barras es un follón para cualquier box. Si entrenas con compañeros, mientras unos descansan, ayudan a cambiar discos y viceversa."]
-]},
-{tag:"B) STRENGTH",items:[
-["B.1","Back Squat",[["82%","2 reps"],["82%","2 reps"]],"Rest 15” entre las dos primeras indicaciones y 2 min tras el segundo set."],
-["B.2","Single Leg Strength",[["","6 Double KB Front Rack Bulgarian Squats"],["","10m Dual DB Heavy Suitcase Step Ups (máximo peso posible)"]],"Rest 30” después de los búlgaros y 90” después de los step ups."]
-]},
-{tag:"C) METCON",items:[
-["","3 rounds",[],
-"15m Handstand Walk\n15/12 Calories Ski\n15m Handstand Walk\n15m Double DB Suitcase Lunges (22,5/15)\n15/12 Calories Ski\n15m Double DB Suitcase Lunges (22,5/15)\n\nTime Cap 12’. Escenario de competición de verano. El estímulo es sostener el ritmo y no buscar una salida demasiado agresiva que penalice las rondas finales."]
-]}
-]},
-"Martes": {
-title:"Sesión #1",
-sections:[
-{tag:"A) GYMNASTICS",items:[
-["","5 bloques",[["","5 rounds AFAP"],["","1 Wall Walks"],["","2 Against the Wall Strict Handstand Push-ups"]],"Rest 60” entre bloques."]
-]},
-{tag:"B) STRENGTH",items:[
-["B.1","Bench Press",[["82%","4 reps · aprox."]],"Rest 2 min entre sets. Con tu RM actual de 140 kg: 82% = 114,8 kg · práctico: 115 kg."],
-["B.2","Weighted Ring Dips + Alt Ring Flutter Kicks",[["","5 Weighted Ring Dips"],["","20 Alt Ring Flutter Kicks"]],"Rest 15” entre ejercicios y 2 min entre sets. 4 sets."]
-]},
-{tag:"C) METCON",items:[
-["","Intervalos competitivos",[["","4 rounds"],["","AMRAP 3’"],["","20 Burpees Box Jump Over"],["","5 Sandbag Clean (90/70)"],["","Remaining time: Max Bar Complex"]],"Rest entre rondas: Ronda 1 — 2 min; Ronda 2 — 1 min; Ronda 3 — No Rest."],
-["","Complex",[["","4 Toes to Bar"],["","2 Bar Muscle-ups sin soltarse"]],"Objetivo: acumular el máximo trabajo de bar complex en el tiempo restante de cada AMRAP."]
-]}
-]},
-"Miércoles": {
-title:"Sesión #1",
-sections:[
-{tag:"A) OLY",items:[
-["A.1","1 High Hang Power Snatch + 2 Hang Power Snatch + 1 Power Snatch",[["50%","2 sets"],["60%","2 sets"],["70%","2 sets"]],"Parte de calentamiento y activación. Aguanta sin soltar la barra hasta terminar el segundo hang power snatch. El snatch desde el suelo no es touch and go. Muévete bien técnicamente."],
-["A.2","2 Hang Power Snatch + 1 Power Snatch",[["75%","3 sets"],["80%","2 sets"],["82,5%","1 set"]],"Rest 45” entre sets. Las 2 repeticiones de Hang son seguidas y después se suelta la barra para ejecutar el snatch desde el suelo."],
-["A.3","Power Snatch",[["85%","1 rep"],["90%","2 × 1"]],"Trabaja calculando el porcentaje de la RM del Power Snatch. Muévete con la máxima calidad posible."]
-]},
-{tag:"B) STRENGTH",items:[
-["B.1","Deadlift Singles",[["87%","3 sets · 2 singles"]],"Con tu RM de 240 kg: 87% = 208,8 kg · práctico: 210 kg."],
-["B.2","Deadlift touch and go",[["85%","3 sets · 3 reps"]],"Con tu RM de 240 kg: 85% = 204 kg · práctico: 205 kg."]
-]},
-{tag:"C) METCON",items:[
-["","8 rounds",[["","8 Thrusters (43/30)"],["","1 Legless"]],"Objetivo: escenario de competición. La carga de thruster es 43/30 kg y la cuerda es legless."]
-]}
-]},
-"Jueves": {
-title:"Sesión #1",
-sections:[
-{tag:"A) RUNNING",items:[
-["","15 min de warm up",[],"Then:\n1,5 km + 1 km + 500m\nRest 3’ entre sets\nThen:\n5’ Cool Down\n\nSets en pista hoy. Dale ritmo alto."]
-]}
-]},
-"Viernes": {
-title:"Sesión #1",
-sections:[
-{tag:"A) OLY",items:[
-["A.1","Every 75” x 4 Sets",[["50% · 67,5 kg · 2 sets","2 Hang Power Clean + 1 Push Jerk / 1 Power Clean + 2 Push Jerk"],["60% · 80 kg · 2 sets","2 Hang Power Clean + 1 Push Jerk / 1 Power Clean + 2 Push Jerk"]],"Tu RM de Power Clean es 135 kg. 50% = 67,5 kg · práctico: 67,5 kg; 60% = 81 kg · práctico: 80 kg."],
-["A.2","Every 90” x 3 Sets",[["70% · 95 kg","2 Hang Power Clean + 2 Push Jerk / 2 Power Clean and Push Jerk"],["75% · 100 kg","Every 75” x 3 Sets: 1 Hang Power Clean + 1 Push Jerk / 2 Power Clean and Push Jerk"],["80% · 107,5 kg","EMOM 3’: 2 Power Clean and Push Jerk"],["85% · 115 kg","Every 45” x 3 Sets: 1 Power Clean and Push Jerk"]],"El porcentaje se calcula sobre tu RM de Power Clean (135 kg)."],
-]},
-{tag:"B) GYMNASTICS",items:[
-["","EMOM 12’",[["Odd","28 Heavy Double Unders"],["Even","7 Ring Muscle-ups"]],"Alterna odd/even durante 12 minutos."]
-]},
-{tag:"C) METCON",items:[
-["","Intervalos competitivos",[["","90” ON / 3’ OFF"],["","2 Rope Climbs"],["","5 Double KB Hang Snatch (24/16)"],["","Max distance Row"]],"Hasta llegar a los 1000/950 m. El objetivo es mantener una capacidad de sufrir y entender el esfuerzo; no salir demasiado rápido para poder sostener el ritmo."]
-]}
-]},
-"Sábado": {
-title:"Sesión #1",
-sections:[
-{tag:"A) OLY",items:[
-["A.1","Warm Up — Every 90” x 3 Sets",[["50% · 55 kg","1 High Hang Squat Snatch + 1 Hang Squat Snatch + 1 Squat Snatch + 1 Squat Snatch con parada below knees + 1 Squat Snatch"],["60% · 65 kg","mismo complejo"],["70% · 77,5 kg","mismo complejo"]],"Parte de calentamiento y activación. RM Squat Snatch = 110 kg. Muévete bien técnicamente y no te calientes con los pesos; respeta los porcentajes propuestos."],
-["A.2","Every 90” x 3 Sets",[["75% · 82,5 kg","1 Hang Squat Snatch + 1 Squat Snatch con parada below knees + 1 Squat Snatch"],["80% · 87,5 kg","1 Squat Snatch con parada below knees + 1 Squat Snatch"]],"Rest 30”. Then: Every 75” x 3 Sets. Después, EMOM 3’: 1 Squat Snatch — 85/88/90%. Con tu RM de Squat Snatch de 110 kg: 85% = 93,5 kg, 88% = 96,8 kg y 90% = 99 kg · prácticos: 95 / 97,5 / 100 kg."]
-]},
-{tag:"B) STRENGTH",items:[
-["","Front Squat",[["82,5%","4 reps · 5 sets"]],"Con tu RM de Front Squat de 160 kg: 82,5% = 132 kg."]
-]},
-{tag:"C) METCON",items:[
-["","Shuttle Run + CrossFit",[["","10 × 20m Shuttle Run"],["","then 10 rounds: 3 Power Snatch (60/40) + 9 Chest to Bar"],["","then 10 × 20m Shuttle Run"]],"Una recta son 20 m. El shuttle se realiza con el cambio de dirección marcado y el objetivo es mantener consistencia. La programación indica escenario de competición y busca gestionar el ritmo para poder sostener las rondas."]
-]}
-]}
-};
+const workouts = {"Lunes":{"title":"Sesión #1","sections":[{"tag":"A) OLY","items":[["A.1","Warm Up — 3 rounds",[["60%","3 Squat Snatch"],["65%","2 Squat Snatch"],["70%","1 Squat Snatch"]],"60″ Echo Bike a ritmo progresivo antes de cada ronda. Descansa 2 minutos entre rondas. Trabajo de calentamiento y activación para las ladders de hoy. En la Echo Bike, busca un ritmo progresivo. No queremos salir de la bici con una fatiga muy grande, pero sí con una ligera sensación de quemazón en las piernas. Ejecuta la barra lo más rápido que puedas, priorizando eficiencia y calidad en el gesto."],["A.2","Squat Snatch Ladder",[["75%","3 Squat Snatch AFAP"],["80%","2 Squat Snatch AFAP"],["85%","1 Squat Snatch AFAP"],["85%","2 Squat Snatch AFAP"],["88%","1 Squat Snatch AFAP"],["90%","1 Squat Snatch AFAP"],["88%","1 Squat Snatch AFAP"],["90%","1 Squat Snatch AFAP"],["93%","1 Squat Snatch AFAP"]],"Bloque 1: 3/2/1 Squat Snatch AFAP al 75/80/85%. Descansa 3′. Bloque 2: 2/1/1 Squat Snatch AFAP al 85/88/90%. Descansa 3′. Bloque 3: 1/1/1 Squat Snatch AFAP al 88/90/93%.\n\nÚltimas semanas de trabajo de ladder: el volumen de repeticiones por ladder disminuye mientras sube la carga. Si las semanas anteriores era importante evitar el fallo, hoy lo es mucho más. Trabajamos con porcentajes muy altos, así que es muy importante asegurar al máximo todas las repeticiones."]]},{"tag":"B) STRENGTH","items":[["B.1","Back Squat",[["87,5%","3 reps · 5 sets"]],"5 series de 3 Back Squat al 87,5%. Descansa 2 minutos entre series. RM Back Squat: 190 kg."]]},{"tag":"C) METCON","items":[["","For time — Time cap 12′",[],"50-30-10 Wall Balls\n50-30-10 Chest to Bar\n50-30-10 Box Jump Over (24/20″)\n\nSeguimos afinando para este final de temporada con escenarios lo más competitivos posibles. Tenemos una escalera descendente donde hay que controlar el ritmo al que se empieza. Esa primera ronda es una trampa y hay que gestionarla bien. Si terminas la ronda de 50 con energía, aprovéchalo y sube el ritmo. Ese tiene que ser el objetivo: llegar a la ronda de 30 con gas para apretar lo que resta de WOD."]]}]},"Martes":{"title":"Sesión #1","sections":[{"tag":"A) GYMNASTICS","items":[["","For time",[],"30-25-20-15-10-5 GHD Sit-ups\n15-12-9-6-3-1 Ring Muscle-ups\n\nDescansa 60″ entre rondas."]]},{"tag":"B) STRENGTH","items":[["B.1","Bench Press",[["87,5%","3 reps · 5 sets"]],"5 series de 3 Bench Press al 87,5% aproximadamente. Descansa 2 minutos entre series. RM Bench Press: 140 kg."]]},{"tag":"C) METCON — INTERVALOS COMPETITIVOS","items":[["","5 rounds · AMRAP 2′",[["Trabajo","5 Wall Walks + 10 Alt. DB Snatch (40/25 kg) + Max Heavy Double Unders"],["Descanso","30″ entre rondas"]],"De espaldas al cronómetro. Prohibido mirar el cronómetro ni en descanso ni en trabajo.\n\nOjo porque hoy tenemos un experimento curioso. El WOD, en cuanto a flow de ejercicios, no tiene ciencia. Hemos hecho muchas veces cosas parecidas: 5 Wall Walks + 10 Alt. DB Snatch y hasta el minuto dos, máximo de Heavy Double Unders. Luego descansarás 30″ y lo repetirás 5 veces.\n\nComo siempre buscamos el mismo tiempo de cash-in (es decir, que los 5 Wall Walks y las 10 dumbbells tardes lo mismo) y mismo número de dobles por ronda. Hasta aquí, como siempre. Ahora bien, el juego es el siguiente: harás todo el WOD sin mirar el cronómetro. Ni durante el trabajo ni durante el descanso. Ponte un cronómetro que pite o que te avise alguien, pero PROHIBIDO MIRAR EL CRONÓMETRO. A ver qué tal sale."]]}]},"Miércoles":{"title":"Sesión #1","sections":[{"tag":"A) GYMNASTICS","items":[["","EMOM 10′",[["Odd","2 Legless"],["Even","7,5 + 7,5 m Handstand Walk con una pirueta"]],"Foco en la eficiencia del movimiento. No tiene que ser un EMOM de desgaste grande, así que escala repeticiones si vas justo/a."]]},{"tag":"B) OLY","items":[["B.1","Squat Clean + Split Jerk Warm Up — Every 75″ × 4 sets",[["2 sets · 60%","Alterna: 1 Squat Clean + 1 Jerk Dip + 1 Split Jerk / 1 Clean Pull + 1 Hang Squat Clean + 1 Split Jerk"],["2 sets · 70%","Alterna: 1 Squat Clean + 1 Jerk Dip + 1 Split Jerk / 1 Clean Pull + 1 Hang Squat Clean + 1 Split Jerk"]],"Calentamiento simple y técnico. Trata de moverte bien, sin prisa y priorizando la técnica. Los porcentajes se calculan sobre 150 kg para el Squat Clean y 150 kg para el Split Jerk; al ser iguales, ambos dan el mismo peso de referencia."],["B.2","Intervalic — Squat Clean + Split Jerk",[["75%","EMOM 3′: 1 Squat Clean + 1 Split Jerk"],["80%","EMOM 3′: 1 Squat Clean + 1 Split Jerk"]],"Descansa 2′ después de los dos EMOM. Los 2 EMOM son para terminar de entrar en calor. El objetivo principal de la sesión son los 3 intentos de Squat Clean + Split Jerk."],["","Intentos máximos — Squat Clean + Split Jerk",[["08:00","1.er intento máximo"],["10:00","2.º intento máximo"],["12:00","3.er intento máximo"]],"El peso de cada intento lo escoges tú. Buscamos conseguir una repetición lo más pesada posible dentro de estos 3 intentos. Respeta las ventanas de tiempo: solo tienes 1 intento por ventana; si fallas, no puedes repetir."]]},{"tag":"C) STRENGTH","items":[["C.1","Deadlift Singles",[["90%","1 rep · 5 sets"]],"5 series de 1 Deadlift al 90%. RM Deadlift: 240 kg."]]},{"tag":"D) METCON","items":[["","4 rounds",[],"500/450 m Row\n9 Deadlift (140/100 kg)\n15 Against the Wall Strict Handstand Push-ups\n\nEste WOD, en este momento de la temporada, no debería presentar mucha dificultad. Son cuatro rondas idénticas y el remo permite saber en tiempo real a qué ritmo estás yendo. Lo único que tenéis que controlar es que hay dos ejercicios: uno, el peso muerto pesado; y el otro, las handstand push-ups en contra de la pared, que podrían generar problemas para mantener el ritmo debido a su alta demanda muscular. A estas alturas de la temporada deberíamos saber perfectamente cómo administrar la relación trabajo-descanso para que estas cuatro rondas fueran prácticamente idénticas. Como siempre, mucho cuidado la ronda 3."]]}]},"Jueves":{"title":"Sesión #1","sections":[{"tag":"A) RUNNING SESH","items":[["","Series en pista — por tiempo",[],"20 minutos de warm up. Después, por tiempo:\n150 m\n300 m\n500 m\n500 m\n300 m\n150 m\n\nDescansa 2 minutos entre series. Después: 5 minutos suaves.\n\nSets en pista hoy. Dadle ritmo alto."]]}]},"Viernes":{"title":"Sesión #1","sections":[{"tag":"A) ACCESSORY","items":[["","EMOM 12′",[["Minuto 1","5 Strict Toes to Bar + 15″ Hang Tuck Hold"],["Minuto 2","20″ + 20″ Copenhagen Plank"],["Minuto 3","5+5 DB Goblet Step Down"]],"Repite la rotación durante 12 minutos: minuto 1, 5 Strict Toes to Bar + 15″ Hang Tuck Hold; minuto 2, 20″ + 20″ Copenhagen Plank; minuto 3, 5+5 DB Goblet Step Down (bajada controlada y caja baja)."]]},{"tag":"B) STRENGTH","items":[["","Front Squat",[["87,5%","3 reps · 4 sets"]],"4 series de 3 Front Squat al 87,5%. RM Front Squat: 160 kg."]]},{"tag":"C) STRENGTH — SQUAT EFFICIENCY","items":[["","Every 2′ × 4 rounds (de cada variante)",[["Odd","20 m Heavy Sled Push + 10 Dual KB Front Squat (24/16 kg)"],["Even","20 m Heavy Sled Drag + 10 Dual KB Front Squat"]],"Alterna entre impares y pares. Calcula 75″ de trabajo por intervalo como máximo. El peso del sled tiene que sentirse heavy, pero hay que poder hacer los tramos seguidos."]]},{"tag":"D) METCON","items":[["","AMRAP 12′ — ventanas de 3′",[["Cada ventana","3 rondas de 8 Thrusters (43/30 kg) + 8/7 Calories Ski"],["Tiempo restante","Max Rope Climbs"]],"Ojo con este formato porque es un tanto raro. Abrirás con 3 rondas de 8 Thrusters y 8/7 Calories Ski. Luego harás máximas cuerdas hasta el minuto 3. Allí volverás a hacer las tres rondas de thrusters y ski y volverás a completar máximas cuerdas hasta finalizar esta segunda ventana de tres minutos. Y esto lo haréis 4 veces en 12 minutos. Buscamos no solo el mismo número de cuerdas por ventana, sino también el mismo tiempo de cada una de las tres rondas en cada ventana."]]}]},"Sábado":{"title":"77 FEET MADNESS (COMPETITION SIMULATION)","sections":[{"tag":"A) WEIGHTLIFTING METCON (1)","items":[["","For time — fases acumulativas",[["Antes de 8′","20/15 Calories Echo Bike + 12 Burpee Box Jump Over (24/20″) + 9 Power Snatch (60/40 kg) + 20/15 Calories Echo Bike + 12 Burpee Box Jump Over + 7 Power Snatch (70/45 kg)"],["Si terminas antes de 8′","Añade 4 minutos al reloj y haz: 20/15 Calories Echo Bike + 12 Burpee Box Jump Over + 5 Power Snatch (80/53 kg)"],["Si terminas antes de 12′","Añade 4 minutos al reloj y haz: 20/15 Calories Echo Bike + 12 Burpee Box Jump Over + 3 Power Snatch (90/60 kg)"],["Si terminas antes de 16′","Añade 4 minutos al reloj y haz: 20/15 Calories Echo Bike + 12 Burpee Box Jump Over + 1 Power Snatch (100/65 kg)"]],"Completa el primer bloque antes de los 8 minutos. Si lo completas, añade 4 minutos al reloj y continúa con el siguiente bloque; si completas ese antes de los 12 minutos, añade otros 4 minutos, y así sucesivamente. Los pesos del Power Snatch masculino son 60, 70, 80, 90 y 100 kg, correspondientes a porcentajes de tu RM de 100 kg.\n\nDescansa todo lo que puedas entre A y B. Aprovecha para hidratarte bien e ingerir algo de carbohidratos."]]},{"tag":"B) SKILLS METCON (2)","items":[["","Rampa ida y vuelta",[],"1-1-1 Rampa ida\n3-2-1 Bar Complex\n1-1-1 Rampa vuelta\n3-2-1 Bar Complex\n\nBar Complex: 4 Toes to Bar + 2 Bar Muscle-ups.\n\nDescansa todo lo que puedas entre B y C. Aprovecha para hidratarte bien e ingerir algo de carbohidratos."]]},{"tag":"C) METCON MIXED CROSSFIT MODAL","items":[["","4 rounds",[],"400 m Run\n12-9-6-3 Sandbag Clean (70/45 kg)\n30 m Sandbag Bearhug Carry (en bloques de 10 m)\n\nImportante: estos Madness no tienen por qué durar 77 minutos. Son tres piezas competitivas puestas seguidas para dar el estímulo competitivo de final de temporada. Reparte las piezas durante el máximo tiempo que puedas."]]}]},"Domingo":{"title":"Rest Day","sections":[{"tag":"RECUPERACIÓN","items":[["","Día de descanso",[],"Rest day. Descanso de entrenamiento."]]}]}};
 
-let selected="Martes";
-const days=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+let selected="Lunes";
+const days=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
 
 function loadRMs(){
  const r=JSON.parse(localStorage.getItem("rm77feet")||"{}");
@@ -217,10 +106,12 @@ function saveRMs(){
  localStorage.setItem("rm77feet",JSON.stringify(r)); renderWorkout(); quickCalc();
 }
 function kgFromPct(pct,rm){
- if(!rm)return null;
- let x=rm*parseFloat(pct.replace(",","."))/100;
- // Practical CrossFit loading: round to the nearest 2.5 kg.
- return Math.round(x/2.5)*2.5;
+ if(rm==="" || rm===null || rm===undefined || !Number.isFinite(parseFloat(rm)))return null;
+ return parseFloat(rm)*parseFloat(String(pct).replace(",","."))/100;
+}
+function fmtKg(value){
+ if(value===null || value===undefined || !Number.isFinite(value))return "";
+ return value.toLocaleString('es-ES',{maximumFractionDigits:2,minimumFractionDigits:0})+" kg";
 }
 function renderDays(){
  document.getElementById("days").innerHTML=days.map(d=>`<div class="day ${d===selected?'active':''}" onclick="selectDay('${d}')"><strong>${d}</strong><small>${workouts[d]?'Programado':'Pendiente'}</small></div>`).join("");
@@ -263,7 +154,7 @@ function renderWorkout(){
          const pctMatch=String(pct).match(/([0-9]+(?:[.,][0-9]+)?)%/);
          if(pctMatch) kg=kgFromPct(pctMatch[1],rm);
          const shownKg = String(pct).match(/·\s*([0-9]+)\s*kg/);
-         out+=`<tr><td>${pct}</td><td>${row[1]}${kg && !shownKg?` · <strong>${kg} kg</strong>`:''}</td></tr>`;
+         out+=`<tr><td>${pct}</td><td>${row[1]}${pctMatch && kg!==null && !shownKg?` · <strong>${fmtKg(kg)}</strong>`:''}</td></tr>`;
        }); out+=`</table>`;
      }
      if(it[3])out+=`<p class="note">${it[3]}</p>`;
@@ -274,12 +165,12 @@ function renderWorkout(){
 }
 function quickCalc(){
  const rm=parseFloat(document.getElementById("quickRM").value), pct=parseFloat(document.getElementById("quickPct").value);
- document.getElementById("quickResult").textContent=(rm&&pct)?Math.round(rm*pct/100)+" kg":"—";
+ document.getElementById("quickResult").textContent=(rm&&pct)?fmtKg(rm*pct/100):"—";
 }
 function resetData(){
  if(confirm("¿Restablecer los RM guardados?")){localStorage.removeItem("rm77feet");location.reload()}
 }
 loadRMs();renderDays();renderWorkout();quickCalc();
 </script>
-<script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));</script></body>
+</body>
 </html>
