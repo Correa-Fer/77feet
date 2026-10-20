@@ -1,5 +1,27 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111827"><link rel="manifest" href="manifest.webmanifest"><title>77Feet Training</title><style>
-:root{color-scheme:dark;--bg:#0b1020;--panel:#151d31;--muted:#aab5ca;--line:#2a3650;--accent:#b9f34a}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f4f7fb;font:16px/1.5 system-ui}header{padding:22px 16px;background:#111827;border-bottom:1px solid var(--line)}h1{margin:0;font-size:26px}header p{margin:4px 0;color:var(--muted)}nav{display:flex;gap:8px;overflow:auto;padding:12px;max-width:850px;margin:auto}button{background:var(--panel);color:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-weight:700;white-space:nowrap}button.active{background:var(--accent);color:#111}main{max-width:850px;margin:auto;padding:12px}input{width:100%;padding:12px;background:#0e1628;color:white;border:1px solid var(--line);border-radius:10px;margin:4px 0 12px}section{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px;margin:12px 0}h2{margin:5px 0 12px}h3{color:var(--accent);margin:0 0 8px}ul{padding-left:22px}li{margin:5px 0}.weight{display:inline-block;background:#26344c;border:1px solid #40516e;border-radius:7px;padding:3px 8px;font-weight:750}.note{background:#10182a;border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;margin-top:10px}.muted,footer{color:var(--muted);font-size:13px}footer{text-align:center;padding:20px}</style></head><body><header><h1>77Feet Training</h1><p>Semana de entrenamiento · ejercicios, indicaciones y cargas calculadas desde tus RM</p></header><nav id="days"></nav><main><input id="search" placeholder="Buscar ejercicio, bloque o indicación…"><div id="content"></div></main><footer>Si no ves los cambios después de publicar, cierra la app y vuelve a abrirla para cargar la nueva versión.</footer>
+:root{color-scheme:light;--bg:#f3f3f3;--panel:#fff;--muted:#777;--line:#e5e5e5;--accent:#ff8617}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#222;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+header{padding:20px 18px;background:#171717;color:#fff;border-bottom:0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+h1{margin:0;font-size:23px;letter-spacing:.2px}header p{display:none}
+#reset{background:#333;color:#fff;border:0;border-radius:13px;padding:12px 16px;font-weight:700}
+nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:15px;max-width:900px;margin:auto}
+button{background:#fff;color:#222;border:2px solid transparent;border-radius:17px;padding:14px 7px;font-weight:750;white-space:normal;font-size:15px}
+button.active{border-color:var(--accent);background:#fff;color:#222}
+main{max-width:900px;margin:auto;padding:0 14px 24px}
+input{width:100%;padding:14px 16px;background:#fff;color:#222;border:1px solid #ccc;border-radius:13px;margin:3px 0 16px;font-size:15px}
+#intro{background:#fff;border-radius:22px;padding:22px 20px;margin:8px 4px 16px;box-shadow:0 3px 18px #00000008}
+#intro h2{font-size:25px;margin:0 0 7px}#intro p{color:#777;margin:0}
+#content{background:#fff;border-radius:22px;padding:20px;margin:0 4px;box-shadow:0 3px 18px #00000008}
+#content>h2{font-size:22px;margin:0 0 14px}
+section{background:#fff;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:18px 0;margin:0}
+section:last-child{border-bottom:0}
+h3{color:#222;margin:0 0 12px;font-size:19px}
+ul{padding-left:20px;margin:8px 0 15px}li{margin:8px 0}
+.weight{display:inline-block;background:#f3f3f3;border:0;border-radius:9px;padding:5px 9px;font-weight:750}
+.note{background:#fafafa;border-left:3px solid var(--accent);padding:12px 13px;border-radius:5px;margin-top:12px;color:#555}
+footer{text-align:center;padding:22px;color:#777;font-size:12px}
+@media(min-width:650px){nav{grid-template-columns:repeat(6,minmax(0,1fr))}header,main,nav{padding-left:max(18px,calc((100% - 860px)/2));padding-right:max(18px,calc((100% - 860px)/2))}}
+</style></head><body><header><h1>77FEET <span style="color:#ff8617">TRAINING</span></h1><button id="reset" type="button">Restablecer</button></header><nav id="days"></nav><main><div id="intro"><h2>Mi programación</h2><p>Semana completa 77Feet · pesos calculados con tus RM · actualización rápida desde el navegador.</p></div><input id="search" placeholder="Buscar ejercicio, movimiento o palabra…"><div id="content"></div></main><footer>Si no ves los cambios después de publicar, cierra la app y vuelve a abrirla para cargar la nueva versión.</footer>
 <script>
 const rm={ss:110,bs:190,bench:140,sc:150,sj:150,dl:240,fs:160};
 const pct=(k,p)=>{let n=rm[k]*p/100;return Number.isInteger(n)?n:String(Number(n.toFixed(4)))};
@@ -36,6 +58,6 @@ const days=[
 {n:'Domingo',b:[['Rest Day',['Descanso y recuperación.'],[],'']]}
 ];
 const nav=document.getElementById('days'),content=document.getElementById('content'),search=document.getElementById('search');let active=0;
-function render(){nav.innerHTML='';days.forEach((d,i)=>{let x=document.createElement('button');x.textContent=d.n;x.className=i===active?'active':'';x.onclick=()=>{active=i;render()};nav.appendChild(x)});let d=days[active],q=search.value.toLowerCase(),out='<h2>'+d.n+'</h2>';d.b.forEach(b=>{if(q&&!b.join(' ').toLowerCase().includes(q))return;out+='<section><h3>'+b[0]+'</h3><ul>'+b[1].map(t=>'<li>'+t+'</li>').join('')+'</ul>';if(b[2].length)out+='<p><b>Cargas calculadas desde tus RM</b></p><ul>'+b[2].map(t=>'<li><span class="weight">'+t+'</span></li>').join('')+'</ul>';if(b[3])out+='<div class="note">'+b[3]+'</div>';out+='</section>'});content.innerHTML=out}
-search.addEventListener('input',render);render();if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+function render(){nav.innerHTML='';days.forEach((d,i)=>{let x=document.createElement('button');x.innerHTML='<span>'+d.n+'</span><br><small style="font-weight:400;color:#888">'+(d.n==='Domingo'?'Descanso':'Programado')+'</small>';x.className=i===active?'active':'';x.onclick=()=>{active=i;render()};nav.appendChild(x)});let d=days[active],q=search.value.toLowerCase(),out='<h2>'+d.n+'</h2>';d.b.forEach(b=>{if(q&&!b.join(' ').toLowerCase().includes(q))return;out+='<section><h3>'+b[0]+'</h3><ul>'+b[1].map(t=>'<li>'+t+'</li>').join('')+'</ul>';if(b[2].length)out+='<p><b>Cargas calculadas desde tus RM</b></p><ul>'+b[2].map(t=>'<li><span class="weight">'+t+'</span></li>').join('')+'</ul>';if(b[3])out+='<div class="note">'+b[3]+'</div>';out+='</section>'});content.innerHTML=out}
+search.addEventListener('input',render);document.getElementById('reset').onclick=()=>{search.value='';active=0;render();window.scrollTo({top:0,behavior:'smooth'})};render();if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script></body></html>
