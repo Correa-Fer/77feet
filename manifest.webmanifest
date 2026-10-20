@@ -2,10 +2,10 @@
   "name": "77Feet Training",
   "short_name": "77Feet",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f4f4",
-  "theme_color": "#181818",
-  "description": "Programación personal de 77Feet con texto completo y porcentajes exactos según tus RM.",
+  "background_color": "#0b1020",
+  "theme_color": "#111827",
   "icons": [
     {
       "src": "icon-192.png",
